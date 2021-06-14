@@ -25,7 +25,7 @@ public class Main {
 		LocalDateTime b = LocalDateTime.of(1998, 01, 15, 11, 35, 05);
 		
 		Duration pere = Duration.between(a, b);
-		long diff = pere.toSeconds()60;
+		long diff = pere.toSeconds();
 		System.out.println(diff/60);
 	}
 
