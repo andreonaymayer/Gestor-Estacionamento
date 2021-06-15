@@ -14,9 +14,11 @@ public class Registro {
 	private Integer horas;
 	private Integer minutos;
 	
+
+	
+	
 	public String toString() {
-		return "Entrada=" + entrada + ", Saida=" + saida + ", Veiculo=" + veiculo + ", Ocupando=" + ocupando
-				+ ", getValorTotal()=" + getValorTotal() + "]";
+		return "Registro ["+ patio.getNome() + "]";
 	}
 
 	public Registro(Date entrada, Date saida, Veiculo veiculo, Patio patio) {
@@ -32,12 +34,11 @@ public class Registro {
 	public void saidaDeVeiculo(Date saida) {
 		this.saida = saida;
 		this.ocupando = false;
-		
+		patio.saidaVeiculo();
 	}
 	
 	
 	public void entradadeVeiculo(Date entrada) {
-		patio.entradaVeiculo();
 		this.entrada = entrada;
 		this.ocupando = true;
 	}
@@ -67,31 +68,6 @@ public class Registro {
 	}
 	
 	
-	
-	public Date getEntrada() {
-		return entrada;
-	}
-	public void setEntrada(Date entrada) {
-		this.entrada = entrada;
-	}
-	public Date getSaida() {
-		return saida;
-	}
-	public void setSaida(Date saida) {
-		this.saida = saida;
-	}
-	public Veiculo getVeiculo() {
-		return veiculo;
-	}
-	public void setVeiculo(Veiculo veiculo) {
-		this.veiculo = veiculo;
-	}
-	public Boolean getOcupando() {
-		return ocupando;
-	}
-	public void setOcupando(Boolean ocupando) {
-		this.ocupando = ocupando;
-	}
 	public void setValorTotal() {
 		Double valorReg=(double) 0;
 		valorReg = this.dias * patio.getValorDiaria();
@@ -102,11 +78,12 @@ public class Registro {
 		
 		this.valorTotal = valorReg;
 	}
-	
-	public Double getValorTotal() {
+
+	public double getValorTotal () {
+		setValorTotal();
 		return valorTotal;
 	}
-
 	
+
 	
 }
