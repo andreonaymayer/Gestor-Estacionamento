@@ -8,6 +8,14 @@ public class Patio {
 	private double valorHora;
 	private double valorDiaria;
 	
+	
+	public Patio(int vagas, double valorHora, double valorDiaria) {
+		this.vagas = vagas;
+		this.valorHora = valorHora;
+		this.valorDiaria = valorDiaria;
+		this.vagasDisponiveis = vagas;
+	}
+
 	public int getVagasOcupadas() {
 		return vagas-vagasDisponiveis;
 	}

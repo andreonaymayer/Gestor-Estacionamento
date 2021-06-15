@@ -1,32 +1,33 @@
 package Aplication;
 
-import java.text.DateFormat;
-import java.time.Duration;
-import java.time.LocalDate;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.Date;
 
-
+import Entities.Carro;
+import Entities.Patio;
+import Entities.Registro;
 
 public class Main {
 
 
-	public static void main(String[] args)   {
-			
-		diferenca();
+	public static void main(String[] args) throws ParseException   {
+		SimpleDateFormat tipoData = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		Date a = tipoData.parse("12/01/2020 12:00:00");
+		Date b = tipoData.parse("12/01/2020 14:00:00");
 		
+		Patio patio;
+		patio = new Patio(10, 5.00, 100.00);		
 		
-}
-
-	public static void diferenca ()
-	{
-		LocalDateTime a = LocalDateTime.of(1998, 01, 15, 10, 30, 10);
-		LocalDateTime b = LocalDateTime.of(1998, 01, 15, 11, 35, 05);
+		Carro car;
+		car = new Carro("III-6787");
+		Registro reg;
+		reg = new Registro(null, null, car,patio);
 		
-		Duration pere = Duration.between(a, b);
-		long diff = pere.toSeconds();
-		System.out.println(diff/60);
+		reg.saidaDeVeiculo(b);
+		System.out.println(reg);
+		
 	}
 
 }
