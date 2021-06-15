@@ -4,16 +4,11 @@ import Entities.Registro;
 
 public class Patio {
 	private String nome = "Grande";
-	private int vagas;
-	private int vagasDisponiveis;
+	private int vagas=0;
+	private int vagasDisponiveis=0;
 	private double valorHora;
 	private double valorDiaria;
 	
-	
-	public String toString() {
-		return "Patio [nome=" + nome + ", vagas=" + vagas + ", vagasDisponiveis=" + vagasDisponiveis + ", valorHora="
-				+ valorHora + ", valorDiaria=" + valorDiaria + "]";
-	}
 
 	public Patio(int vagas, double valorHora, double valorDiaria) {
 		this.vagas = vagas;
@@ -22,10 +17,6 @@ public class Patio {
 		this.vagasDisponiveis = vagas;
 	}
 
-	public int getVagasOcupadas() {
-		return vagas-vagasDisponiveis;
-	}
-	
 	public void entradaVeiculo() {
 		vagasDisponiveis-=1;
 	}
@@ -34,6 +25,13 @@ public class Patio {
 		vagasDisponiveis+=1;
 	}
 	
+	public int getVagasOcupadas() {
+		return vagas-vagasDisponiveis;
+	}
+	public String toString() {
+		return "Patio [nome=" + nome + ", vagas=" + vagas + ", vagasDisponiveis=" + vagasDisponiveis + ", valorHora="
+				+ valorHora + ", valorDiaria=" + valorDiaria + "]";
+	}
 	public int getVagas() {
 		return vagas;
 	}

@@ -15,10 +15,10 @@ public class Registro {
 	private Integer minutos;
 	
 
-	
-	
+
 	public String toString() {
-		return "Registro ["+ patio.getNome() + "]";
+		return "Registro [entrada=" + entrada + ", saida=" + saida + ", valorTotal=" + valorTotal + ", dias=" + dias
+				+ ", horas=" + horas + ", minutos=" + minutos + "]";
 	}
 
 	public Registro(Date entrada, Date saida, Veiculo veiculo, Patio patio) {
@@ -29,32 +29,41 @@ public class Registro {
 		}
 		this.saida = saida;
 		this.veiculo = veiculo;
+		this.patio = patio;
+		patio.entradaVeiculo();
+	}
+	
+	public void saidaDeVeiculo() {
+		Date dataAtual = new Date();
+		this.saida = dataAtual;
+		this.ocupando = false;
+		patio.saidaVeiculo();
+		Diferenca();
+	}
+	
+	public void setValorTotal() {
+		this.valorTotal = this.horas * patio.getValorHora();
+		this.valorTotal = this.valorTotal + patio.getValorDiaria() * dias;
+		if (this.minutos>15) {
+			this.valorTotal=this.valorTotal + patio.getValorHora();
+		}
 	}
 	
 	public void saidaDeVeiculo(Date saida) {
 		this.saida = saida;
 		this.ocupando = false;
 		patio.saidaVeiculo();
+		Diferenca();
 	}
-	
 	
 	public void entradadeVeiculo(Date entrada) {
 		this.entrada = entrada;
 		this.ocupando = true;
 	}
 	
-	public void setHoras (int h) {
-		this.horas = h;
-	}
-	public void setDias (int d) {
-		this.dias = d;
-	}
-	public void setMinutos (int m) {
-		this.minutos = m;
-	}
 	
-	public String Diferenca (Date menorData, Date maiorData) {
-		Long x = maiorData.getTime() - menorData.getTime();
+	public void Diferenca () {
+		Long x = saida.getTime() - entrada.getTime();
 		int horas = (int) (x/1000/60/60);
 		setHoras(horas);
 		int dias = (int) horas/24;
@@ -63,27 +72,84 @@ public class Registro {
 		setMinutos(minutos);
 		int segundos = (int) (x/1000)- minutos*60 - horas*3600;
 		horas = (int) (x/1000/60/60)-dias*24;
-		String Retorno = String.format("Dia: %d\nHoras: %d:%d:%d", dias,horas,minutos,segundos);
-		return Retorno;
+		setHoras(horas);
+		setValorTotal();
+		System.out.printf("Dias: %d\nHoras: %d\nMinutos: %d\n",dias,horas,minutos);
+		
 	}
 	
-	
-	public void setValorTotal() {
-		Double valorReg=(double) 0;
-		valorReg = this.dias * patio.getValorDiaria();
-		valorReg = valorReg + this.dias * patio.getValorHora();
-		if (this.dias == 0 || this.horas == 0 || this.minutos > 5) {
-			valorReg = patio.getValorHora();
-		}
-		
-		this.valorTotal = valorReg;
+
+
+	public Date getEntrada() {
+		return entrada;
 	}
 
-	public double getValorTotal () {
-		setValorTotal();
+	public void setEntrada(Date entrada) {
+		this.entrada = entrada;
+	}
+
+	public Date getSaida() {
+		return saida;
+	}
+
+	public void setSaida(Date saida) {
+		this.saida = saida;
+	}
+
+	public Veiculo getVeiculo() {
+		return veiculo;
+	}
+
+	public void setVeiculo(Veiculo veiculo) {
+		this.veiculo = veiculo;
+	}
+
+	public Boolean getOcupando() {
+		return ocupando;
+	}
+
+	public void setOcupando(Boolean ocupando) {
+		this.ocupando = ocupando;
+	}
+
+	public Double getValorTotal() {
 		return valorTotal;
 	}
-	
 
+
+	public Patio getPatio() {
+		return patio;
+	}
+
+	public void setPatio(Patio patio) {
+		this.patio = patio;
+	}
+
+	public Integer getDias() {
+		return dias;
+	}
+
+	public void setDias(Integer dias) {
+		this.dias = dias;
+	}
+
+	public Integer getHoras() {
+		return horas;
+	}
+
+	public void setHoras(Integer horas) {
+		this.horas = horas;
+	}
+
+	public Integer getMinutos() {
+		return minutos;
+	}
+
+	public void setMinutos(Integer minutos) {
+		this.minutos = minutos;
+	}
+
+	
+	
 	
 }
