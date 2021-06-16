@@ -27,6 +27,7 @@ public class Main {
 		reg = new Registro(a, b, car, patio);
 		
 		
+		
 	}
 
 }

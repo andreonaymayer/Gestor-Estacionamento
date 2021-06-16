@@ -70,7 +70,7 @@ public class Registro {
 		setDias(dias);
 		int minutos = (int) ((x/1000)/60) - (horas*60);
 		setMinutos(minutos);
-		int segundos = (int) (x/1000)- minutos*60 - horas*3600;
+		//int segundos = (int) (x/1000)- minutos*60 - horas*3600;
 		horas = (int) (x/1000/60/60)-dias*24;
 		setHoras(horas);
 		setValorTotal();

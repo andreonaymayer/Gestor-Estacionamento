@@ -1,6 +1,4 @@
 package Entities;
-import Entities.Registro;
-
 
 public class Patio {
 	private String nome = "Grande";
