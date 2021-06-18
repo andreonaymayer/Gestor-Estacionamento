@@ -6,14 +6,14 @@ public class Carro extends Veiculo{
 	public String cor;
 	
 
-	public Carro(/*String nome, String marca, String cor,*/ String placa) {
-		super(placa);
-		this.nome = "Voyage";
-		this.marca = "VW";
-		this.cor = "Preto";
+	public Carro(String nome, String marca, String cor, String placa) {
+		super(placa,idVeiculo);
+		this.nome = nome;
+		this.marca = "marca";
+		this.cor = cor;
 	}
 	public String toString() {
-		return "Carro [nome=" + nome + ", marca=" + marca + ", cor=" + cor + "]";
+		return "Carro [placa= "+ super.placa + ", nome=" + nome + ", marca=" + marca + ", cor=" + cor + "]";
 	}
 	public String getNome() {
 		return nome;

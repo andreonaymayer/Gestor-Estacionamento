@@ -6,8 +6,12 @@ public class Moto extends Veiculo{
 	public String marca;
 	public String cor;
 	
-	public Moto(String placa) {
-		super(placa);
-		// TODO Auto-generated constructor stub
+	public Moto(String placa, int idVeiculo) {
+		super(placa, idVeiculo);
+		this.nome = "CG 150";
+		this.marca = "Honda";
+		this.cor = "Vermelha";
 	}
+	
+
 }
