@@ -36,7 +36,8 @@ public class Main {
 		}
 		
 		//System.out.println(TbCarro);
-		
+		TbCarro.add(new Carro("Voyage", "VW", "Preta", "PLACAC"));
+		TbMoto.add(new Moto("Voyage", "VW", "Preta", "PLACAM"));
 		
 		System.out.println("------ Menu Veiculos ------");
 		System.out.print(" 1 - Cadastrar veiculo\n 2 - Editar Veiculo\n 3 - Sair\n :>");
@@ -49,28 +50,116 @@ public class Main {
 			switch (escolha) {
 			case 1:
 				
-				System.out.println("> Insira a Placa do carro:"); String placa = sc.nextLine();
-				System.out.println("> Insira a marca do carro:"); String marca = sc.nextLine();
-				System.out.println("> Insira a cor do carro:"); String cor = sc.nextLine();
-				System.out.println("> Insira o nome do carro:"); String nome = sc.nextLine();
+				System.out.print("> Insira a Placa do carro:"); String placa = sc.nextLine();
+				System.out.print("> Insira a marca do carro:"); String marca = sc.nextLine();
+				System.out.print("> Insira a cor do carro:"); String cor = sc.nextLine();
+				System.out.print("> Insira o nome do carro:"); String nome = sc.nextLine();
 				
-				TbCarro.add(new Carro(nome, marca, cor, placa));TbCarro.add(new Carro(nome, marca, cor, placa));TbCarro.add(new Carro(nome, marca, cor, placa));
-				
+				TbCarro.add(new Carro(nome, marca, cor, placa));
 				System.out.println("Veiculo: ("+ pesquisaListaVeiculos(TbCarro,placa) +") Cadastrado!");
 				break;
 			case 2:
+				System.out.print("> Insira a Placa da moto:");  placa = sc.nextLine();
+				System.out.print("> Insira a marca da moto:");  marca = sc.nextLine();
+				System.out.print("> Insira a cor da moto:");  cor = sc.nextLine();
+				System.out.print("> Insira o nome da moto:"); nome = sc.nextLine();
 				
+				TbMoto.add(new Moto(nome, marca, cor, placa));
+				System.out.println("Veiculo: ("+ pesquisaListaVeiculos(TbMoto,placa) +") Cadastrado!");
 				break;
 			case 3:
-				
+				System.out.println("Saindo...");
 				break;
 
 			default:
+				System.out.println("Valor invalido.");
 				break;
 			}
 			break;
 		case 2:
-			
+			System.out.println("------------------------");
+			System.out.printf(" 1 - Editar Carro;\n 2 - Editar moto;\n 3 - Sair\n :>");
+			escolha = sc.nextInt();sc.nextLine();
+
+			switch (escolha) {
+			case 1:
+				
+				System.out.print("> Insira a Placa do carro:"); String placa = sc.nextLine();
+				int indexInt = pesquisaListaVeiculosIndex(TbCarro, placa);
+				if (indexInt != -1) {
+					System.out.println("O que deseja editar:\n 1 - Nome\n 2 - Marca\n 3 - Cor\n 4 - Sair\n:>");
+					escolha = sc.nextInt();sc.nextLine();
+					System.out.print("Digite novo valor: ");
+					String editado = sc.nextLine();
+					switch (escolha) {
+					case 1:
+						TbCarro.get(indexInt).setNome(editado);
+						break;
+					case 2:
+						TbCarro.get(indexInt).setMarca(editado);
+						break;
+					case 3:
+						TbCarro.get(indexInt).setCor(editado);
+						break;
+					case 4:
+						System.out.println("Saindo...");
+						break;
+
+					default:
+						System.out.println("Valor invalido.");
+						break;
+					}
+					
+				}else {
+					System.out.println("Placa :"+placa+" Não encontrada. Tente novamente");
+					if (pesquisaListaVeiculosIndex(TbMoto, placa) != -1)
+						System.out.println("A placa inserida ("+placa+"), esta cadastrada como uma moto.");
+				}
+					System.out.println("Registro atualizado: "+TbCarro.get(indexInt));
+				break;
+			case 2:
+				System.out.print("> Insira a Placa da moto:");  placa = sc.nextLine();
+				indexInt = pesquisaListaVeiculosIndex(TbMoto, placa);
+				if (indexInt != -1) {
+					System.out.println("O que deseja editar:\n 1 - Nome\n 2 - Marca\n 3 - Cor\n 4 - Sair\n:>");
+					escolha = sc.nextInt();sc.nextLine();
+					System.out.print("Digite novo valor: ");
+					String editado = sc.nextLine();
+					switch (escolha) {
+					case 1:
+						TbMoto.get(indexInt).setNome(editado);
+						break;
+					case 2:
+						TbMoto.get(indexInt).setMarca(editado);
+						break;
+					case 3:
+						TbMoto.get(indexInt).setCor(editado);
+						break;
+					case 4:
+						System.out.println("Saindo...");
+						break;
+
+					default:
+						System.out.println("Valor invalido.");
+						break;
+					}
+					System.out.println("Registro atualizado: "+TbMoto.get(indexInt));
+				}else {
+					System.out.println("Placa :"+placa+" Não encontrada. Tente novamente");
+					if (pesquisaListaVeiculosIndex(TbCarro, placa) != -1)
+						System.out.println("A placa inserida ("+placa+"), esta cadastrada como um carro.");
+				}
+					
+				
+				break;
+			case 3:
+				System.out.println("Saindo...");
+				break;
+
+			default:
+				System.out.println("Valor invalido.");
+				break;
+			}
 			break;
 		case 3:
 			System.out.println("Saindo...");
@@ -81,7 +170,7 @@ public class Main {
 			break;
 		}
 		
-		System.out.println(TbCarro.get(0));
+		
 		
 	}
 	public void patioMenu (Patio patio, Scanner sc) {
@@ -179,5 +268,13 @@ public class Main {
 				return ((Veiculo) lista.get(i)).getPlaca();
 		}
 		return "Vazio";
+	}
+	
+	public static Integer pesquisaListaVeiculosIndex (List lista, String placa) {
+		for (int i = 0; i < lista.size(); i++) {
+			if (((Veiculo) lista.get(i)).getPlaca().equals(placa))
+				return i;
+		}
+		return -1;
 	}
 }
