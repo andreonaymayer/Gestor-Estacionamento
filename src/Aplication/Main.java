@@ -39,6 +39,7 @@ public class Main {
 		TbCarro.add(new Carro("Voyage", "VW", "Preta", "PLACAC"));
 		TbMoto.add(new Moto("Voyage", "VW", "Preta", "PLACAM"));
 		
+		
 		System.out.println("------ Menu Veiculos ------");
 		System.out.print(" 1 - Cadastrar veiculo\n 2 - Editar Veiculo\n 3 - Sair\n :>");
 		int escolha = sc.nextInt();
@@ -51,6 +52,15 @@ public class Main {
 			case 1:
 				
 				System.out.print("> Insira a Placa do carro:"); String placa = sc.nextLine();
+				if (pesquisaListaVeiculosIndex(TbCarro, placa)!=-1) {
+					System.out.println("Placa já cadastrada como carro: "+TbCarro.get(pesquisaListaVeiculosIndex(TbCarro, placa)));
+					break;
+				}
+				if (pesquisaListaVeiculosIndex(TbMoto, placa)!=-1) {
+					System.out.println("Placa já cadastrada como Moto: "+TbMoto.get(pesquisaListaVeiculosIndex(TbMoto, placa)));
+					break;
+				}
+				
 				System.out.print("> Insira a marca do carro:"); String marca = sc.nextLine();
 				System.out.print("> Insira a cor do carro:"); String cor = sc.nextLine();
 				System.out.print("> Insira o nome do carro:"); String nome = sc.nextLine();
@@ -60,6 +70,14 @@ public class Main {
 				break;
 			case 2:
 				System.out.print("> Insira a Placa da moto:");  placa = sc.nextLine();
+				if (pesquisaListaVeiculosIndex(TbCarro, placa)!=-1) {
+					System.out.println("Placa já cadastrada como carro: "+TbCarro.get(pesquisaListaVeiculosIndex(TbCarro, placa)));
+					break;
+				}
+				if (pesquisaListaVeiculosIndex(TbMoto, placa)!=-1) {
+					System.out.println("Placa já cadastrada como Moto: "+TbMoto.get(pesquisaListaVeiculosIndex(TbMoto, placa)));
+					break;
+				}
 				System.out.print("> Insira a marca da moto:");  marca = sc.nextLine();
 				System.out.print("> Insira a cor da moto:");  cor = sc.nextLine();
 				System.out.print("> Insira o nome da moto:"); nome = sc.nextLine();
@@ -150,7 +168,6 @@ public class Main {
 						System.out.println("A placa inserida ("+placa+"), esta cadastrada como um carro.");
 				}
 					
-				
 				break;
 			case 3:
 				System.out.println("Saindo...");
