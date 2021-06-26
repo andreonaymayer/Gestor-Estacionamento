@@ -44,7 +44,7 @@ public class Moto extends Veiculo{
 		if (ocupandoVei) {
 			ocupe = "Sim";
 		}
-		return "Moto [placa "+ super.placa + ", Ocupando="+ ocupe + ", nome=" + nome + ", marca=" + marca + ", cor=" + cor + ", placa=" + placa + "]";
+		return "Moto [placa "+ super.placa + ", Ocupando="+ ocupe + ", nome=" + nome + ", marca=" + marca + ", cor=" + cor + "]";
 	}
 	
 	

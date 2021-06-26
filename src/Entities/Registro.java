@@ -48,6 +48,7 @@ public class Registro {
 		patio.saidaVeiculo();
 		this.veiculo.setOcupandoVei(false);
 		Diferenca();
+		System.out.println("Valor Total: "+ this.valorTotal);
 	}
 	
 	public void setValorTotal() {

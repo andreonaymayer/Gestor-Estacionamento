@@ -1,9 +1,10 @@
 package Aplication;
 
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,17 +19,12 @@ import Entities.Veiculo;
 public class Main {
 
 
-	public static void main(String[] args) throws ParseException   {
+	public static void main(String[] args) throws ParseException, InterruptedException   {
 		Scanner sc = new Scanner(System.in); //inicia entrada teclado
 		
 		SimpleDateFormat tipoData = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); //define o tipo de data
 		Date a = tipoData.parse("26/06/2021 00:00:00");
 		Date b = tipoData.parse("31/06/2021 15:00:00");
-		
-		
-		
-		
-		//x = tipoData.parse()
 		
 		
 		Patio patio; patio = new Patio(10,(double) 5.00,(double) 100.00); //instancia 		
@@ -37,19 +33,56 @@ public class Main {
 		List <Carro> TbCarro= new ArrayList<>(); //inicia a lista de Carros
 		List <Moto> TbMoto= new ArrayList<>(); //inicia a lista de Motos
 		
-		//TbCarro.add(new Carro("Andreo","Legal", "ijaij","iii923"));
-
-
-		
-		//System.out.println(TbCarro);
 		TbCarro.add(new Carro("Voyage", "VW", "Preta", "PLACAC"));
+		TbCarro.add(new Carro("Voyage", "VW", "Preta", "SAIU"));
 		TbCarro.add(new Carro("Voyage", "VW", "Preta", "CARRO"));
 		TbMoto.add(new Moto("Cb150", "Honda", "Preta", "PLACAM"));
 		TbMoto.add(new Moto("R1000", "Yamaha", "Preta", "MOTO"));
 		TbReg.add(new Registro(a, null, TbCarro.get(pesquisaListaVeiculosIndex(TbCarro, "CARRO")), patio, true));
-		TbReg.add(new Registro(a, null, TbMoto.get(pesquisaListaVeiculosIndex(TbMoto, "MOTO")), patio, true));
-		System.out.println(TbCarro.get(0));
+		TbReg.add(new Registro(a, new Date(), TbCarro.get(pesquisaListaVeiculosIndex(TbCarro, "CARRO")), patio, false));
 		
+		TbReg.add(new Registro(a, null, TbMoto.get(pesquisaListaVeiculosIndex(TbMoto, "MOTO")), patio, true));
+		TbReg.add(new Registro(a, new Date(), TbCarro.get(pesquisaListaVeiculosIndex(TbCarro, "SAIU")), patio, false));
+		
+		menu(sc, TbReg, TbMoto, TbCarro, patio);
+		
+	}
+	public void pesquisaMenu (Scanner sc, List TbReg, List TbMoto, List TbCarro) {
+		System.out.println(" ------ Pesquisa ------");
+		System.out.print("  1 - Exibir veiculos que estão ocupando vagas no momento;\n  2 - Pesquisar histórico;\n  3 - Sair;\n:>> ");
+		int escolha = sc.nextInt();
+		switch (escolha) {
+		case 1:
+			for (int i = 0; i < TbReg.size(); i++) {
+				if (((Registro) TbReg.get(i)).getOcupando()) {
+					System.out.println(TbReg.get(i));
+				}
+			}
+			break;
+		case 2:
+			System.out.print("   Insira a placa para pesquisa.\n :>>");
+			String placa = sc.nextLine();placa = sc.nextLine();
+			if (placaExiste(placa, TbCarro, TbMoto)==-1) {
+				System.out.println("Veiculo não cadastrado, não há registros.");
+				break;
+			}
+			
+			for (int i = 0; i < TbReg.size(); i++) {
+				if (((Registro) TbReg.get(i)).getVeiculo().getPlaca().equals(placa)) {
+					System.out.println(TbReg.get(i));
+				}
+			}
+			break;
+		case 3:
+			System.out.println("Saindo...");
+			break;
+		default:
+			System.out.println("Opção invalida, saindo...");
+			break;
+		}
+	}
+	
+	public static void gerenciadorMenu(Scanner sc, List TbReg, List TbMoto, List TbCarro, Patio patio) {
 		String placa;
 		System.out.println("------ Gestor ------");
 		System.out.print(" 1 - Entrada de veiculo\n 2 - Saída Veiculo\n 3 - Sair\n :>");
@@ -60,7 +93,7 @@ public class Main {
 			System.out.print("Insira a placa:\n>> ");
 			placa = sc.nextLine();placa = sc.nextLine();
 			int teste = pesquisaListaRegistroIndex(TbReg, placa);
-			if (teste !=-1 && TbReg.get(teste).getOcupando() != false) {
+			if (teste !=-1 && ((Registro) TbReg.get(teste)).getOcupando() != false) {
 				System.out.println("Já foi registrada a entrada desse veículo no estacionamento. Ele está ocupando uma vaga. Dados:\n" + TbReg.get(teste)+"\n");
 				break;
 			}
@@ -68,14 +101,14 @@ public class Main {
 			if (pesquisaListaVeiculosIndex(TbMoto, placa)!=-1) {
 				int index = pesquisaListaVeiculosIndex(TbMoto, placa);
 				
-				TbReg.add(new Registro(new Date(), null, TbMoto.get(index), patio, true));
-				TbMoto.get(index).setOcupandoVei(true);
+				TbReg.add(new Registro(new Date(), null, (Veiculo) TbMoto.get(index), patio, true));
+				((Veiculo) TbMoto.get(index)).setOcupandoVei(true);
 				System.out.println(TbReg.get(index));
 			}else if (pesquisaListaVeiculosIndex(TbCarro, placa)!=-1) {
 				int index = pesquisaListaVeiculosIndex(TbCarro, placa);
 				
-				TbReg.add(new Registro(new Date(), null, TbCarro.get(index), patio, true));
-				TbCarro.get(index).setOcupandoVei(true);
+				TbReg.add(new Registro(new Date(), null, (Veiculo) TbCarro.get(index), patio, true));
+				((Veiculo) TbCarro.get(index)).setOcupandoVei(true);
 				System.out.println(TbReg.get(index));
 			}else {
 				System.out.printf("!! Placa não encontrada, vamos cadastrar o veiculo - %s -. !! \n",placa);
@@ -95,13 +128,13 @@ public class Main {
 				TbCarro.add(new Carro(nome, marca, cor, placa));
 				System.out.println("Veiculo: ("+ pesquisaListaVeiculos(TbCarro,placa) +") Cadastrado!");
 				int index = pesquisaListaVeiculosIndex(TbCarro, placa);
-				TbReg.add(new Registro(new Date(), null, TbCarro.get(index), patio, true));
+				TbReg.add(new Registro(new Date(), null, (Veiculo) TbCarro.get(index), patio, true));
 				break;
 			case 2://moto
 				TbMoto.add(new Moto(nome, marca, cor, placa));
 				System.out.println("Veiculo: ("+ pesquisaListaVeiculos(TbMoto,placa) +") Cadastrada!");
 				index = pesquisaListaVeiculosIndex(TbMoto, placa);
-				TbReg.add(new Registro(new Date(), null, TbMoto.get(index), patio, true));
+				TbReg.add(new Registro(new Date(), null, (Veiculo) TbMoto.get(index), patio, true));
 				break;
 			}
 			}
@@ -115,9 +148,9 @@ public class Main {
 				System.out.println("Placa não cadastrada.");
 				break;
 			}
-			if (pesquisaListaRegistroIndex(TbReg, placa)!=-1 && TbReg.get(pesquisaListaRegistroIndex(TbReg, placa)).getOcupando()) {
+			if (pesquisaListaRegistroIndex(TbReg, placa)!=-1 && ((Registro) TbReg.get(pesquisaListaRegistroIndex(TbReg, placa))).getOcupando()) {
 				int indexAlterando=pesquisaListaRegistroIndex(TbReg, placa);
-					TbReg.get(indexAlterando).saidaDeVeiculo();
+					((Registro) TbReg.get(indexAlterando)).saidaDeVeiculo();
 					break;
 			}
 					
@@ -131,19 +164,13 @@ public class Main {
 		default:
 			break;
 		}
-		System.out.println("-------loop--------");
-		for (int i = 0; i < TbReg.size(); i++) {
-			System.out.println(TbReg.get(i));
-		}
-		System.out.println(TbMoto.get(0));
 	}
-	
-	public void veiculosMenu (List TbCarro,List TbMoto, Scanner sc) {
+	public static void veiculosMenu (List TbCarro,List TbMoto, Scanner sc) throws InterruptedException {
 		System.out.println("------ Menu Veiculos ------");
 		System.out.print(" 1 - Cadastrar veiculo\n 2 - Editar Veiculo\n 3 - Sair\n :>");
 		int escolha = sc.nextInt();
 		switch (escolha) {
-		case 1:
+		case 1://CADASTRAR VEICULO
 			System.out.println("------------------------");
 			System.out.printf(" 1 - Cadastrar Carro;\n 2 - Cadastrar moto;\n 3 - Sair\n :>");
 			escolha = sc.nextInt();sc.nextLine();
@@ -193,89 +220,74 @@ public class Main {
 				break;
 			}
 			break;
-		case 2:
+		case 2://EDITAR VEICULO
 			System.out.println("------------------------");
-			System.out.printf(" 1 - Editar Carro;\n 2 - Editar moto;\n 3 - Sair\n :>");
-			escolha = sc.nextInt();sc.nextLine();
-
-			switch (escolha) {
-			case 1:
-				
-				System.out.print("> Insira a Placa do carro:"); String placa = sc.nextLine();
-				int indexInt = pesquisaListaVeiculosIndex(TbCarro, placa);
-				if (indexInt != -1) {
-					System.out.println("O que deseja editar:\n 1 - Nome\n 2 - Marca\n 3 - Cor\n 4 - Sair\n:>");
-					escolha = sc.nextInt();sc.nextLine();
-					System.out.print("Digite novo valor: ");
-					String editado = sc.nextLine();
-					switch (escolha) {
-					case 1:
-						((Carro) TbCarro.get(indexInt)).setNome(editado);
-						break;
-					case 2:
-						((Carro) TbCarro.get(indexInt)).setMarca(editado);
-						break;
-					case 3:
-						((Carro) TbCarro.get(indexInt)).setCor(editado);
-						break;
-					case 4:
-						System.out.println("Saindo...");
-						break;
-
-					default:
-						System.out.println("Valor invalido.");
-						break;
-					}
-					
-				}else {
-					System.out.println("Placa :"+placa+" Não encontrada. Tente novamente");
-					if (pesquisaListaVeiculosIndex(TbMoto, placa) != -1)
-						System.out.println("A placa inserida ("+placa+"), esta cadastrada como uma moto.");
+			System.out.print("> Insira a Placa do VEICULO:"); String placa = sc.nextLine();placa = sc.nextLine();
+			if (placaExiste(placa, TbCarro, TbMoto)==1) {//CARRO
+			
+				int indexInt = pesquisaListaVeiculosIndex(TbCarro,placa);
+				System.out.println(TbCarro.get(indexInt));
+				System.out.print("O que deseja editar:\n 1 - Nome\n 2 - Marca\n 3 - Cor\n 4 - Sair\n:>");
+				escolha = sc.nextInt();sc.nextLine();
+				if (escolha!=4) { 
+				System.out.print("Digite novo valor: ");
 				}
-					System.out.println("Registro atualizado: "+TbCarro.get(indexInt));
-				break;
-			case 2:
-				System.out.print("> Insira a Placa da moto:");  placa = sc.nextLine();
-				indexInt = pesquisaListaVeiculosIndex(TbMoto, placa);
-				if (indexInt != -1) {
-					System.out.println("O que deseja editar:\n 1 - Nome\n 2 - Marca\n 3 - Cor\n 4 - Sair\n:>");
-					escolha = sc.nextInt();sc.nextLine();
-					System.out.print("Digite novo valor: ");
+				switch (escolha) {
+				case 1:
 					String editado = sc.nextLine();
-					switch (escolha) {
-					case 1:
-						((Carro) TbMoto.get(indexInt)).setNome(editado);
-						break;
-					case 2:
-						((Carro) TbMoto.get(indexInt)).setMarca(editado);
-						break;
-					case 3:
-						((Carro) TbMoto.get(indexInt)).setCor(editado);
-						break;
-					case 4:
-						System.out.println("Saindo...");
-						break;
+					((Carro) TbCarro.get(indexInt)).setNome(editado);
+					break;
+				case 2:
+					editado = sc.nextLine();
+					((Carro) TbCarro.get(indexInt)).setMarca(editado);
+					break;
+				case 3:
+					editado = sc.nextLine();
+					((Carro) TbCarro.get(indexInt)).setCor(editado);
+					break;
+				case 4:
+					System.out.println("Saindo...");
+					break;
 
-					default:
-						System.out.println("Valor invalido.");
-						break;
-					}
-					System.out.println("Registro atualizado: "+TbMoto.get(indexInt));
-				}else {
-					System.out.println("Placa :"+placa+" Não encontrada. Tente novamente");
-					if (pesquisaListaVeiculosIndex(TbCarro, placa) != -1)
-						System.out.println("A placa inserida ("+placa+"), esta cadastrada como um carro.");
+				default:
+					System.out.println("Valor invalido.");
+					break;
 				}
-					
-				break;
-			case 3:
-				System.out.println("Saindo...");
-				break;
+				System.out.println(TbCarro.get(indexInt));
+				carrega();				
+			}else if (placaExiste(placa, TbCarro, TbMoto)==2) {//MOTO
+				int indexInt = pesquisaListaVeiculosIndex(TbMoto,placa);
+				System.out.println(TbMoto.get(indexInt));
+				System.out.print("O que deseja editar:\n 1 - Nome\n 2 - Marca\n 3 - Cor\n 4 - Sair\n:>");
+				escolha = sc.nextInt();sc.nextLine();
+				if (escolha!=4) { 
+				System.out.print("Digite novo valor: ");
+				}
+				switch (escolha) {
+				case 1:
+					String editado = sc.nextLine();
+					((Moto) TbMoto.get(indexInt)).setNome(editado);
+					break;
+				case 2:
+					editado = sc.nextLine();
+					((Moto) TbMoto.get(indexInt)).setMarca(editado);
+					break;
+				case 3:
+					editado = sc.nextLine();
+					((Moto) TbMoto.get(indexInt)).setCor(editado);
+					break;
+				case 4:
+					System.out.println("Saindo...");
+					break;
 
-			default:
-				System.out.println("Valor invalido.");
-				break;
-			}
+				default:
+					System.out.println("Valor invalido.");
+					break;
+				}
+				System.out.println(TbMoto.get(indexInt));
+				carrega();
+			}else
+				System.out.println("Impossivel editar veiculo que não está cadastrado. Saindo...");
 			break;
 		case 3:
 			System.out.println("Saindo...");
@@ -343,38 +355,6 @@ public class Main {
 		}
 	}
 	
-	public void menu (Scanner sc) {
-		
-		int saida = 0;
-		do {
-			System.out.printf("Gerenciador de estacionamento\nSelecione uma opção:"
-					+" 1 - Entrada/saida\n 2 - Veiculos\n 3 - Informações de pátio\n 4 - Pesquisa\n 5 - Sair\n :>");
-			switch (saida) {
-			case 1:
-				System.out.println("Entrada/Saida");
-				break;
-			case 2:
-				System.out.println("Veiculos");
-				break;
-			case 3:
-				System.out.println("Pátio");
-				break;
-			case 5:
-				System.out.println("Saindo...");
-				return;
-				
-			default:
-				System.out.println("Opção invalida, digite novamente: ");
-				saida = sc.nextInt();
-			}
-
-			saida = sc.nextInt();
-			if (saida <0 || saida > 5) {
-				System.out.println("Saindo..");
-				break;
-			}
-		}while (saida != 0);
-	}
 
 	public static String pesquisaListaVeiculos (List lista, String placa) {
 		for (int i = 0; i < lista.size(); i++) {
@@ -417,14 +397,57 @@ public class Main {
 		
 	}
 	
-	public static Integer placaExiste (String placa,List Carro, List Moto) {
-		if (pesquisaListaVeiculosIndex(Carro, placa)!=-1) {
+	public static Integer placaExiste (String placa,List TbCarro, List TbMoto) {
+		if (pesquisaListaVeiculosIndex(TbCarro, placa)!=-1) {
 			return 1;
 		}
-		if (pesquisaListaVeiculosIndex(Moto, placa)!=-1) {
+		if (pesquisaListaVeiculosIndex(TbMoto, placa)!=-1) {
 			return 2;
 		}
 		return -1;
 	}
 	
+	
+	public static void menu (Scanner sc,List TbReg, List TbMoto, List TbCarro, Patio patio) throws InterruptedException {
+		
+		int saida = 0;
+		do {
+			System.out.printf("Gerenciador de estacionamento\nSelecione uma opção:\n"
+					+" 1 - Entrada/saida\n 2 - Veiculos\n 3 - Informações de pátio\n 4 - Pesquisa\n 5 - Sair\n :>");
+			saida = sc.nextInt();
+			switch (saida) {
+			case 1:
+				gerenciadorMenu(sc, TbReg, TbMoto, TbCarro, patio);
+				break;
+			case 2:
+				veiculosMenu(TbCarro, TbMoto, sc);
+				break;
+			case 3:
+				System.out.println("Pátio");
+				break;
+			case 4:
+				System.out.println("Pesquisa");
+				break;
+			case 5:
+				System.out.println("Saindo...");
+				return;
+				
+			default:
+				System.out.println("Opção invalida, digite novamente. ");
+				break;
+			}
+			carrega();
+		}while (saida != 0);
+		
+		
+	}
+
+	public static void carrega() throws InterruptedException {
+		System.out.print("|");
+		for (int i = 0; i < 10; i++) {
+			Thread.sleep(150);
+			System.out.print("*");
+		}System.out.print("|\n");
+		System.out.println("______________________________________\n______________________________________");
+	}
 }
