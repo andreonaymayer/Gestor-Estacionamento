@@ -1,5 +1,6 @@
 package Entities;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import Entities.Patio;
 
@@ -13,15 +14,20 @@ public class Registro {
 	private Integer dias;
 	private Integer horas;
 	private Integer minutos;
+	private Integer idRegistro;
+
+
 	
-
-
 	public String toString() {
-		return "Registro [entrada=" + entrada + ", saida=" + saida + ", valorTotal=" + valorTotal + ", dias=" + dias
-				+ ", horas=" + horas + ", minutos=" + minutos + "]";
+		String ocupe = "Não";
+		if (ocupando) {
+			ocupe = "Sim";
+		}
+		return "Veiculo: "+ veiculo.getPlaca() + "\n  entrada =" + entrada + ", saida=" + saida + ", veiculo=" + veiculo.getPlaca() + ", ocupando=" + ocupe
+				+ ", valorTotal=" + valorTotal + ", dias=" + dias + ", horas=" + horas + ", minutos=" + minutos + " ;";
 	}
 
-	public Registro(Date entrada, Date saida, Veiculo veiculo, Patio patio) {
+	public Registro(Date entrada, Date saida, Veiculo veiculo, Patio patio, Boolean ocupando) {
 		this.entrada = entrada;
 		if (entrada==null) {
 		    Date dataAtual = new Date();  
@@ -31,6 +37,8 @@ public class Registro {
 		this.veiculo = veiculo;
 		this.patio = patio;
 		patio.entradaVeiculo();
+		this.ocupando = ocupando;
+		this.veiculo.setOcupandoVei(ocupando);
 	}
 	
 	public void saidaDeVeiculo() {
@@ -38,6 +46,7 @@ public class Registro {
 		this.saida = dataAtual;
 		this.ocupando = false;
 		patio.saidaVeiculo();
+		this.veiculo.setOcupandoVei(false);
 		Diferenca();
 	}
 	
@@ -47,13 +56,6 @@ public class Registro {
 		if (this.minutos>15) {
 			this.valorTotal=this.valorTotal + patio.getValorHora();
 		}
-	}
-	
-	public void saidaDeVeiculo(Date saida) {
-		this.saida = saida;
-		this.ocupando = false;
-		patio.saidaVeiculo();
-		Diferenca();
 	}
 	
 	public void entradadeVeiculo(Date entrada) {

@@ -1,19 +1,25 @@
 package Entities;
 
 public class Carro extends Veiculo{
-	public String nome;
-	public String marca;
-	public String cor;
+	private String nome;
+	private String marca;
+	private String cor;
 	
 
 	public Carro(String nome, String marca, String cor, String placa) {
-		super(placa,idVeiculo);
+		super(placa, idVeiculo);
 		this.nome = nome;
 		this.marca = "marca";
 		this.cor = cor;
+		this.ocupandoVei = false;
+		
 	}
 	public String toString() {
-		return "Carro [placa= "+ super.placa + ", nome=" + nome + ", marca=" + marca + ", cor=" + cor + "]";
+		String ocupe = "Não";
+		if (ocupandoVei) {
+			ocupe = "Sim";
+		}
+		return "Carro [placa= "+ super.placa + " Ocupando="+ ocupe +", nome=" + nome + ", marca=" + marca + ", cor=" + cor + "]";
 	}
 	public String getNome() {
 		return nome;

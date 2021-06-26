@@ -2,7 +2,9 @@ package Entities;
 
 public abstract class Veiculo {
 	protected String placa;
-	protected static int idVeiculo;
+	protected Boolean indAtivo;
+	protected Boolean ocupandoVei;
+	protected static  int idVeiculo;
 	public String getPlaca() {
 		return placa;
 	}
@@ -18,6 +20,18 @@ public abstract class Veiculo {
 	public Veiculo(String placa, int idVeiculo) {
 		this.placa = placa;
 		Veiculo.idVeiculo = idVeiculo;
+	}
+	public Boolean getIndAtivo() {
+		return indAtivo;
+	}
+	public void setIndAtivo(Boolean indAtivo) {
+		this.indAtivo = indAtivo;
+	}
+	public Boolean getOcupandoVei() {
+		return ocupandoVei;
+	}
+	public void setOcupandoVei(Boolean ocupandoVei) {
+		this.ocupandoVei = ocupandoVei;
 	}
 
 

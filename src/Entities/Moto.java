@@ -2,15 +2,16 @@ package Entities;
 
 public class Moto extends Veiculo{
 
-	public String nome;
-	public String marca;
-	public String cor;
+	private String nome;
+	private String marca;
+	private String cor;
 	
 	public Moto(String nome, String marca, String cor, String placa) {
 		super(placa, idVeiculo);
 		this.nome = nome;
 		this.marca = marca;
 		this.cor = cor;
+		this.ocupandoVei = false;
 	}
 
 	public String getNome() {
@@ -39,7 +40,11 @@ public class Moto extends Veiculo{
 
 	
 	public String toString() {
-		return "Moto [nome=" + nome + ", marca=" + marca + ", cor=" + cor + ", placa=" + placa + "]";
+		String ocupe = "Não";
+		if (ocupandoVei) {
+			ocupe = "Sim";
+		}
+		return "Moto [placa "+ super.placa + ", Ocupando="+ ocupe + ", nome=" + nome + ", marca=" + marca + ", cor=" + cor + ", placa=" + placa + "]";
 	}
 	
 	

@@ -2,6 +2,8 @@ package Aplication;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,8 +22,14 @@ public class Main {
 		Scanner sc = new Scanner(System.in); //inicia entrada teclado
 		
 		SimpleDateFormat tipoData = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); //define o tipo de data
-		Date a = tipoData.parse("01/06/2021 15:00:00");
+		Date a = tipoData.parse("26/06/2021 00:00:00");
 		Date b = tipoData.parse("31/06/2021 15:00:00");
+		
+		
+		
+		
+		//x = tipoData.parse()
+		
 		
 		Patio patio; patio = new Patio(10,(double) 5.00,(double) 100.00); //instancia 		
 				
@@ -31,15 +39,106 @@ public class Main {
 		
 		//TbCarro.add(new Carro("Andreo","Legal", "ijaij","iii923"));
 
-		for (Registro umdeles: TbReg) {
-			System.out.println(umdeles);
-		}
+
 		
 		//System.out.println(TbCarro);
 		TbCarro.add(new Carro("Voyage", "VW", "Preta", "PLACAC"));
-		TbMoto.add(new Moto("Voyage", "VW", "Preta", "PLACAM"));
+		TbCarro.add(new Carro("Voyage", "VW", "Preta", "CARRO"));
+		TbMoto.add(new Moto("Cb150", "Honda", "Preta", "PLACAM"));
+		TbMoto.add(new Moto("R1000", "Yamaha", "Preta", "MOTO"));
+		TbReg.add(new Registro(a, null, TbCarro.get(pesquisaListaVeiculosIndex(TbCarro, "CARRO")), patio, true));
+		TbReg.add(new Registro(a, null, TbMoto.get(pesquisaListaVeiculosIndex(TbMoto, "MOTO")), patio, true));
+		System.out.println(TbCarro.get(0));
 		
-		
+		String placa;
+		System.out.println("------ Gestor ------");
+		System.out.print(" 1 - Entrada de veiculo\n 2 - Saída Veiculo\n 3 - Sair\n :>");
+		int escolha = sc.nextInt();
+		switch (escolha) {
+		case 1:
+			System.out.println("  .:: Entrada de veiculos ::.");
+			System.out.print("Insira a placa:\n>> ");
+			placa = sc.nextLine();placa = sc.nextLine();
+			int teste = pesquisaListaRegistroIndex(TbReg, placa);
+			if (teste !=-1 && TbReg.get(teste).getOcupando() != false) {
+				System.out.println("Já foi registrada a entrada desse veículo no estacionamento. Ele está ocupando uma vaga. Dados:\n" + TbReg.get(teste)+"\n");
+				break;
+			}
+			
+			if (pesquisaListaVeiculosIndex(TbMoto, placa)!=-1) {
+				int index = pesquisaListaVeiculosIndex(TbMoto, placa);
+				
+				TbReg.add(new Registro(new Date(), null, TbMoto.get(index), patio, true));
+				TbMoto.get(index).setOcupandoVei(true);
+				System.out.println(TbReg.get(index));
+			}else if (pesquisaListaVeiculosIndex(TbCarro, placa)!=-1) {
+				int index = pesquisaListaVeiculosIndex(TbCarro, placa);
+				
+				TbReg.add(new Registro(new Date(), null, TbCarro.get(index), patio, true));
+				TbCarro.get(index).setOcupandoVei(true);
+				System.out.println(TbReg.get(index));
+			}else {
+				System.out.printf("!! Placa não encontrada, vamos cadastrar o veiculo - %s -. !! \n",placa);
+			System.out.print("  O veiculo é:\n  1 - Carro;\n  2 - Moto;\n  3 - Cancelar;\n   :>");
+			teste = sc.nextInt();
+			if (teste!=1 && teste!=2) {
+				System.out.println("Saindo...");
+				break;
+			}
+			System.out.print("> Insira a marca do carro:"); String marca = sc.nextLine();marca = sc.nextLine();
+			System.out.print("> Insira a cor do carro:"); String cor = sc.nextLine();
+			System.out.print("> Insira o nome do carro:"); String nome = sc.nextLine();
+			
+			
+			switch (teste) {
+			case 1://carro
+				TbCarro.add(new Carro(nome, marca, cor, placa));
+				System.out.println("Veiculo: ("+ pesquisaListaVeiculos(TbCarro,placa) +") Cadastrado!");
+				int index = pesquisaListaVeiculosIndex(TbCarro, placa);
+				TbReg.add(new Registro(new Date(), null, TbCarro.get(index), patio, true));
+				break;
+			case 2://moto
+				TbMoto.add(new Moto(nome, marca, cor, placa));
+				System.out.println("Veiculo: ("+ pesquisaListaVeiculos(TbMoto,placa) +") Cadastrada!");
+				index = pesquisaListaVeiculosIndex(TbMoto, placa);
+				TbReg.add(new Registro(new Date(), null, TbMoto.get(index), patio, true));
+				break;
+			}
+			}
+			
+			break;
+		case 2:
+			System.out.print("Digite a placa do veículo que vai deixar o estacionamento.\n:> ");
+			placa = sc.nextLine();placa = sc.nextLine();
+			int tipoVei = placaExiste(placa, TbCarro, TbMoto);
+			if (tipoVei==-1) {
+				System.out.println("Placa não cadastrada.");
+				break;
+			}
+			if (pesquisaListaRegistroIndex(TbReg, placa)!=-1 && TbReg.get(pesquisaListaRegistroIndex(TbReg, placa)).getOcupando()) {
+				int indexAlterando=pesquisaListaRegistroIndex(TbReg, placa);
+					TbReg.get(indexAlterando).saidaDeVeiculo();
+					break;
+			}
+					
+				System.out.printf("O veiculo %s não está no estacionamento no momento.\n",placa);
+			
+			
+			break;
+		case 3:
+			System.out.println("Saindo...");
+			break;
+		default:
+			break;
+		}
+		System.out.println("-------loop--------");
+		for (int i = 0; i < TbReg.size(); i++) {
+			System.out.println(TbReg.get(i));
+		}
+		System.out.println(TbMoto.get(0));
+	}
+	
+	public void veiculosMenu (List TbCarro,List TbMoto, Scanner sc) {
 		System.out.println("------ Menu Veiculos ------");
 		System.out.print(" 1 - Cadastrar veiculo\n 2 - Editar Veiculo\n 3 - Sair\n :>");
 		int escolha = sc.nextInt();
@@ -111,13 +210,13 @@ public class Main {
 					String editado = sc.nextLine();
 					switch (escolha) {
 					case 1:
-						TbCarro.get(indexInt).setNome(editado);
+						((Carro) TbCarro.get(indexInt)).setNome(editado);
 						break;
 					case 2:
-						TbCarro.get(indexInt).setMarca(editado);
+						((Carro) TbCarro.get(indexInt)).setMarca(editado);
 						break;
 					case 3:
-						TbCarro.get(indexInt).setCor(editado);
+						((Carro) TbCarro.get(indexInt)).setCor(editado);
 						break;
 					case 4:
 						System.out.println("Saindo...");
@@ -145,13 +244,13 @@ public class Main {
 					String editado = sc.nextLine();
 					switch (escolha) {
 					case 1:
-						TbMoto.get(indexInt).setNome(editado);
+						((Carro) TbMoto.get(indexInt)).setNome(editado);
 						break;
 					case 2:
-						TbMoto.get(indexInt).setMarca(editado);
+						((Carro) TbMoto.get(indexInt)).setMarca(editado);
 						break;
 					case 3:
-						TbMoto.get(indexInt).setCor(editado);
+						((Carro) TbMoto.get(indexInt)).setCor(editado);
 						break;
 					case 4:
 						System.out.println("Saindo...");
@@ -186,10 +285,8 @@ public class Main {
 			System.out.println("Opção invalida.");
 			break;
 		}
-		
-		
-		
 	}
+	
 	public void patioMenu (Patio patio, Scanner sc) {
 		int escolha;
 		System.out.printf("-- Informações de pátio --\n Vagas Totais:   %d   | Vagas disponíveis: %d"
@@ -287,6 +384,14 @@ public class Main {
 		return "Vazio";
 	}
 	
+	public static Integer pesquisaListaRegistroIndex (List lista, String placa) {
+		for (int i = 0; i < lista.size(); i++) {
+			if (((Registro) lista.get(i)).getVeiculo().getPlaca().equals(placa))
+				return i;
+		}
+		return -1;
+	}
+	
 	public static Integer pesquisaListaVeiculosIndex (List lista, String placa) {
 		for (int i = 0; i < lista.size(); i++) {
 			if (((Veiculo) lista.get(i)).getPlaca().equals(placa))
@@ -294,4 +399,32 @@ public class Main {
 		}
 		return -1;
 	}
+
+	public static Date dataAtual () throws ParseException {
+
+		SimpleDateFormat tipoData = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); //define o tipo de data
+		LocalDateTime c;
+		c = LocalDateTime.now();
+		int dia = c.getDayOfMonth();
+		int mes = c.getMonthValue();
+		int ano = c.getYear();
+		int hora = c.getHour();
+		int minuto = c.getMinute();
+		int segundo = c.getSecond();
+		String stringData = String.format("%d/%d/%d %d:%d:%d", dia,mes,ano,hora,minuto,segundo);
+		Date x = tipoData.parse(stringData);
+		return x;
+		
+	}
+	
+	public static Integer placaExiste (String placa,List Carro, List Moto) {
+		if (pesquisaListaVeiculosIndex(Carro, placa)!=-1) {
+			return 1;
+		}
+		if (pesquisaListaVeiculosIndex(Moto, placa)!=-1) {
+			return 2;
+		}
+		return -1;
+	}
+	
 }
