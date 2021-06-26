@@ -43,11 +43,12 @@ public class Main {
 		
 		TbReg.add(new Registro(a, null, TbMoto.get(pesquisaListaVeiculosIndex(TbMoto, "MOTO")), patio, true));
 		TbReg.add(new Registro(a, new Date(), TbCarro.get(pesquisaListaVeiculosIndex(TbCarro, "SAIU")), patio, false));
+		patio.saidaVeiculo();patio.saidaVeiculo();
 		
 		menu(sc, TbReg, TbMoto, TbCarro, patio);
 		
 	}
-	public void pesquisaMenu (Scanner sc, List TbReg, List TbMoto, List TbCarro) {
+	public static void pesquisaMenu (Scanner sc, List TbReg, List TbMoto, List TbCarro) {
 		System.out.println(" ------ Pesquisa ------");
 		System.out.print("  1 - Exibir veiculos que estão ocupando vagas no momento;\n  2 - Pesquisar histórico;\n  3 - Sair;\n:>> ");
 		int escolha = sc.nextInt();
@@ -58,6 +59,9 @@ public class Main {
 					System.out.println(TbReg.get(i));
 				}
 			}
+			System.out.println("\nPressione enter para finalizar.");
+			sc.nextLine();sc.nextLine();
+					
 			break;
 		case 2:
 			System.out.print("   Insira a placa para pesquisa.\n :>>");
@@ -72,6 +76,8 @@ public class Main {
 					System.out.println(TbReg.get(i));
 				}
 			}
+			System.out.println("\nPressione enter para finalizar.");
+			sc.nextLine();
 			break;
 		case 3:
 			System.out.println("Saindo...");
@@ -167,7 +173,7 @@ public class Main {
 	}
 	public static void veiculosMenu (List TbCarro,List TbMoto, Scanner sc) throws InterruptedException {
 		System.out.println("------ Menu Veiculos ------");
-		System.out.print(" 1 - Cadastrar veiculo\n 2 - Editar Veiculo\n 3 - Sair\n :>");
+		System.out.print(" 1 - Cadastrar veiculo\n 2 - Editar Veiculo\n 3 - Listar veiculos cadastrados\n 4 - Sair\n :>");
 		int escolha = sc.nextInt();
 		switch (escolha) {
 		case 1://CADASTRAR VEICULO
@@ -290,6 +296,20 @@ public class Main {
 				System.out.println("Impossivel editar veiculo que não está cadastrado. Saindo...");
 			break;
 		case 3:
+			System.out.println("Listagem");
+			System.out.println(" == Motos");
+			for (int i = 0; i < TbMoto.size(); i++) {
+				System.out.println("   :"+TbMoto.get(i));
+			}
+			System.out.println(" == Carros");
+			for (int i = 0; i < TbCarro.size(); i++) {
+				System.out.println("   :"+TbCarro.get(i));
+			}
+			System.out.println("\nPressione enter para sair.");
+			sc.nextLine();sc.nextLine();
+			break;
+			
+		case 4:
 			System.out.println("Saindo...");
 			break;
 
@@ -299,15 +319,15 @@ public class Main {
 		}
 	}
 	
-	public void patioMenu (Patio patio, Scanner sc) {
+	public static void patioMenu (Patio patio, Scanner sc) {
 		int escolha;
 		System.out.printf("-- Informações de pátio --\n Vagas Totais:   %d   | Vagas disponíveis: %d"
-				+"\n Valor hora: R$ %.2f | Valor Diaria(24h) R$ %.2f\n\n 1 - Editar\n 2 - Sair");
+				+"\n Valor hora: R$ %.2f | Valor Diaria(24h) R$ %.2f\n\n 1 - Editar\n 2 - Sair\n :>",patio.getVagas(),patio.getVagasDisponiveis(),patio.getValorHora(),patio.getValorDiaria());
 		escolha = sc.nextInt();
 		switch (escolha) {
 		case 1:
 			System.out.println("--------  Editar patio --------");
-			System.out.printf("\n 1 - Editar Vagas totais;\n 2 - Editar Valor Hora;\n 3 - Editar valor diaria;\n :>"
+			System.out.printf("\n 1 - Editar Vagas totais;\n 2 - Editar Valor Hora;\n 3 - Editar valor diaria;\n 4 - Sair\n :>"
 					,patio.getVagas(),patio.getVagasDisponiveis(),patio.getValorHora(),patio.getValorDiaria());
 			escolha = sc.nextInt();
 			switch (escolha) {
@@ -320,6 +340,7 @@ public class Main {
 						valor = sc.nextInt();
 					}
 				patio.setVagas(valor);
+				System.out.println("Ajustado!");
 				break;
 			case 2: 
 				System.out.printf("  Digite o novo valor da Hora (Atual: R$ %.2f): ",patio.getValorHora());
@@ -330,6 +351,7 @@ public class Main {
 						valor = sc.nextInt();
 						patio.setValorHora(valor);
 					}
+				System.out.println("Ajustado!");
 				break;
 			case 3: 
 				System.out.printf("  Digite o novo valor da Diaria (Atual: R$ %.2f):",patio.getValorDiaria());
@@ -340,6 +362,10 @@ public class Main {
 						valor = sc.nextInt();
 						patio.setValorHora(valor);
 					}
+				System.out.println("Ajustado!");
+				break;
+			case 4:
+				System.out.println("Saindo...");
 				break;
 			default:
 				System.out.println("Opção invalida");
@@ -347,6 +373,7 @@ public class Main {
 			}
 			break;
 		case 2:
+			System.out.println("Saindo...");
 			break;
 			
 		default:
@@ -423,13 +450,14 @@ public class Main {
 				veiculosMenu(TbCarro, TbMoto, sc);
 				break;
 			case 3:
-				System.out.println("Pátio");
+				patioMenu(patio,sc);
 				break;
 			case 4:
-				System.out.println("Pesquisa");
+				pesquisaMenu (sc, TbReg, TbMoto, TbCarro);
 				break;
 			case 5:
 				System.out.println("Saindo...");
+				carrega();
 				return;
 				
 			default:
