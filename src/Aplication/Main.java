@@ -24,8 +24,7 @@ public class Main {
 		
 		SimpleDateFormat tipoData = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); //define o tipo de data
 		Date a = tipoData.parse("26/06/2021 00:00:00");
-		Date b = tipoData.parse("31/06/2021 15:00:00");
-		
+				
 		
 		Patio patio; patio = new Patio(10,(double) 5.00,(double) 100.00); //instancia 		
 				
@@ -48,6 +47,7 @@ public class Main {
 		menu(sc, TbReg, TbMoto, TbCarro, patio);
 		
 	}
+	
 	public static void pesquisaMenu (Scanner sc, List TbReg, List TbMoto, List TbCarro) {
 		System.out.println(" ------ Pesquisa ------");
 		System.out.print("  1 - Exibir veiculos que estão ocupando vagas no momento;\n  2 - Pesquisar histórico;\n  3 - Sair;\n:>> ");
@@ -115,7 +115,7 @@ public class Main {
 				
 				TbReg.add(new Registro(new Date(), null, (Veiculo) TbCarro.get(index), patio, true));
 				((Veiculo) TbCarro.get(index)).setOcupandoVei(true);
-				System.out.println(TbReg.get(index));
+				System.out.printf("Entrada registrada. Veiculo: %s\n",placa);
 			}else {
 				System.out.printf("!! Placa não encontrada, vamos cadastrar o veiculo - %s -. !! \n",placa);
 			System.out.print("  O veiculo é:\n  1 - Carro;\n  2 - Moto;\n  3 - Cancelar;\n   :>");
